@@ -72,4 +72,7 @@ vim.o.confirm = true
 vim.opt.softtabstop = 2
 vim.opt.expandtab = false
 
+vim.opt.wrap = true
+vim.opt.linebreak = true
+
 -- vim: ts=8 sts=2 sw=2 noet
