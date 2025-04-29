@@ -1,3 +1,5 @@
+-- 🍿 A collection of QoL plugins for Neovim
+
 return {
   'folke/snacks.nvim',
   priority = 1000,

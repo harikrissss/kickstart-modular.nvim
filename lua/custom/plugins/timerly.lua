@@ -1,3 +1,5 @@
+-- Beautiful countdown timer plugin for Neovim
+
 return {
   'nvzone/timerly',
   dependencies = {

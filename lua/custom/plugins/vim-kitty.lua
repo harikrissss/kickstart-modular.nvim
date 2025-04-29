@@ -1,3 +1,5 @@
+-- Vim syntax highlighting for Kitty terminal config files
+
 return {
   'fladson/vim-kitty',
   ft = 'kitty',
