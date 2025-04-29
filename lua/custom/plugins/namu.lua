@@ -1,3 +1,5 @@
+-- Flexible and sleek fuzzy picker, LSP symbol navigator, and more. inspired by Zed.
+
 return {
   'bassamsdata/namu.nvim',
   config = function()

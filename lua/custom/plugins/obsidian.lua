@@ -1,3 +1,5 @@
+-- Obsidian 🤝 Neovim
+
 return {
   'epwalsh/obsidian.nvim',
   version = '*', -- recommended, use latest release instead of latest commit
@@ -21,11 +23,7 @@ return {
     workspaces = {
       {
         name = 'personal',
-        path = '~/vaults/personal',
-      },
-      {
-        name = 'work',
-        path = '~/vaults/work',
+        path = '/home/hari-ts436/Documents/obsidian-vault',
       },
     },
 
