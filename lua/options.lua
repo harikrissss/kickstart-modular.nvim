@@ -67,4 +67,6 @@ vim.opt.expandtab = false
 vim.opt.wrap = true
 vim.opt.linebreak = true
 
+vim.opt.conceallevel = 1
+
 -- vim: ts=8 sts=2 sw=2 noet
