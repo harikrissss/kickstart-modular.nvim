@@ -138,9 +138,9 @@ return {
 
   -- Optional, boolean or a function that takes a filename and returns a boolean.
   -- `true` indicates that you don't want obsidian.nvim to manage frontmatter.
-  disable_frontmatter = false,
+  disable_frontmatter = true,
 
-  -- Optional, alternatively you can customize the frontmatter data.
+  --[[ -- Optional, alternatively you can customize the frontmatter data.
   ---@return table
   note_frontmatter_func = function(note)
     -- Add the title of the note as an alias.
@@ -159,7 +159,7 @@ return {
     end
 
     return out
-  end,
+  end, ]]
 
   -- Optional, for templates (see below).
   templates = {
@@ -175,18 +175,18 @@ return {
   ---@param url string
   follow_url_func = function(url)
     -- Open the URL in the default web browser.
-    vim.fn.jobstart { 'open', url } -- Mac OS
-    -- vim.fn.jobstart({"xdg-open", url})  -- linux
+    -- vim.fn.jobstart { 'open', url } -- Mac OS
+    vim.fn.jobstart { 'xdg-open', url } -- linux
     -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-    -- vim.ui.open(url) -- need Neovim 0.10.0+
+    vim.ui.open(url) -- need Neovim 0.10.0+
   end,
 
   -- Optional, by default when you use `:ObsidianFollowLink` on a link to an image
   -- file it will be ignored but you can customize this behavior here.
   ---@param img string
   follow_img_func = function(img)
-    vim.fn.jobstart { 'qlmanage', '-p', img } -- Mac OS quick look preview
-    -- vim.fn.jobstart({"xdg-open", url})  -- linux
+    -- vim.fn.jobstart { 'qlmanage', '-p', img } -- Mac OS quick look preview
+    vim.fn.jobstart { 'xdg-open', url } -- linux
     -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
   end,
 
