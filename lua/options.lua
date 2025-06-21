@@ -71,12 +71,12 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
-vim.opt.softtabstop = 2
-vim.opt.expandtab = false
+vim.o.softtabstop = 2
+vim.o.expandtab = false
 
-vim.opt.wrap = true
-vim.opt.linebreak = true
+vim.o.wrap = true
+vim.o.linebreak = true
 
-vim.opt.conceallevel = 1
+vim.o.conceallevel = 1
 
 -- vim: ts=8 sts=2 sw=2 noet
