@@ -30,7 +30,7 @@ return {
     },
 
     -- Optional, if you keep notes in a specific subdirectory of your vault.
-    notes_subdir = 'notes',
+    notes_subdir = 'src/notes',
 
     -- Optional, set the log level for obsidian.nvim. This is an integer corresponding to one of the log
     -- levels defined by "vim.log.levels.*".
@@ -38,7 +38,7 @@ return {
 
     daily_notes = {
       -- Optional, if you keep daily notes in a separate directory.
-      folder = 'notes/dailies',
+      folder = 'src/notes/dailies',
       -- Optional, if you want to change the date format for the ID of daily notes.
       date_format = '%Y-%m-%d',
       -- Optional, if you want to change the date format of the default alias of daily notes.
@@ -162,7 +162,7 @@ return {
 
     -- Optional, for templates (see below).
     templates = {
-      folder = 'templates',
+      folder = 'src/templates',
       date_format = '%Y-%m-%d',
       time_format = '%H:%M',
       -- A map for custom variables, the key should be the variable and the value a function
@@ -307,7 +307,7 @@ return {
       -- The default folder to place images in via `:ObsidianPasteImg`.
       -- If this is a relative path it will be interpreted as relative to the vault root.
       -- You can always override this per image by passing a full path to the command instead of just a filename.
-      img_folder = 'assets/imgs', -- This is the default
+      img_folder = 'src/assets/imgs', -- This is the default
 
       -- Optional, customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
       ---@return string
