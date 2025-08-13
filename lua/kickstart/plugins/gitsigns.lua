@@ -21,13 +21,26 @@ return {
   ---@module 'gitsigns'
   ---@type Gitsigns.Config
   ---@diagnostic disable-next-line: missing-fields
-  opts = {
-    signs = {
-      add = { text = '+' }, ---@diagnostic disable-line: missing-fields
-      change = { text = '~' }, ---@diagnostic disable-line: missing-fields
-      delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
-      topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
-      changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+    opts = {
+      signs = {
+        add = { text = '┃' },
+        change = { text = '┃' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      signs_staged = {
+        add = { text = '┃' },
+        change = { text = '┃' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      numhl = true, -- Toggle with `:Gitsigns toggle_numhl`
+      current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
+      sign_priority = 15,
     },
     on_attach = function(bufnr)
       local gitsigns = require 'gitsigns'

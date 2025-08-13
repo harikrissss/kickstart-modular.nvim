@@ -9,7 +9,9 @@ return {
     ---@module 'todo-comments'
     ---@type TodoOptions
     ---@diagnostic disable-next-line: missing-fields
-    opts = { signs = false },
+  opts = {
+    signs = true, -- show icons in the signs column
+    sign_priority = 8, -- sign priority
   },
 }
 
