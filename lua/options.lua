@@ -79,4 +79,6 @@ vim.o.linebreak = true
 
 vim.o.conceallevel = 2
 
+vim.o.termguicolors = true
+
 -- vim: ts=8 sts=2 sw=2 noet
