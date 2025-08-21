@@ -73,6 +73,8 @@ vim.o.confirm = true
 
 vim.o.softtabstop = 2
 vim.o.expandtab = false
+vim.o.tabstop = 8
+vim.o.shiftwidth = 2
 
 vim.o.wrap = true
 vim.o.linebreak = true

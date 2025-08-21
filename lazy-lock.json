@@ -7,6 +7,7 @@
   "dooing": { "branch": "main", "commit": "72a4dddfedefd7531a80a9f269eb636aa0c09553" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "fidget.nvim": { "branch": "main", "commit": "2cb5edb2dd6700a958a446b20bb2be04d318da9d" },
+  "floaterm": { "branch": "main", "commit": "ae3de018d20dccd9372bbff7137e8a6d6030f69e" },
   "gitsigns.nvim": { "branch": "main", "commit": "6e3c66548035e50db7bd8e360a29aec6620c3641" },
   "guess-indent.nvim": { "branch": "main", "commit": "84a4987ff36798c2fc1169cbaff67960aed9776f" },
   "kaleidosearch.nvim": { "branch": "main", "commit": "0a76c60b26ae4b4a80a5e820054c974d9d4d94da" },
