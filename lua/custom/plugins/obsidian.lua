@@ -25,7 +25,7 @@ return {
     workspaces = {
       {
         name = 'personal',
-        path = '/home/hari-ts436/Documents/obsidian-vault',
+        path = '/home/hari-24312/Documents/obsidian-vault',
       },
     },
 
