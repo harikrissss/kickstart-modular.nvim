@@ -9,28 +9,90 @@ return {
     bigfile = { enabled = true },
     dashboard = {
       enabled = true,
+      -- These settings are used by some built-in sections
       preset = {
-        -- Used by the `header` section
-        --     header = [[
-        -- ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-        -- ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-        -- ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-        -- ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-        -- ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-        -- ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-        header = [[
-██████╗ ██╗   ██╗████████╗██╗  ██╗██╗██╗   ██╗ █████╗     ██╗   ██╗██╗███╗   ███╗
-██╔══██╗██║   ██║╚══██╔══╝██║  ██║██║╚██╗ ██╔╝██╔══██╗    ██║   ██║██║████╗ ████║
-██████╔╝██║   ██║   ██║   ███████║██║ ╚████╔╝ ███████║    ██║   ██║██║██╔████╔██║
-██╔═══╝ ██║   ██║   ██║   ██╔══██║██║  ╚██╔╝  ██╔══██║    ╚██╗ ██╔╝██║██║╚██╔╝██║
-██║     ╚██████╔╝   ██║   ██║  ██║██║   ██║   ██║  ██║     ╚████╔╝ ██║██║ ╚═╝ ██║
-╚═╝      ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝      ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+        -- Defaults to a picker that supports `fzf-lua`, `telescope.nvim` and `mini.pick`
+        ---@type fun(cmd:string, opts:table)|nil
+        pick = nil,
+        -- Used by the `keys` section to show keymaps.
+        -- Set your custom keymaps here.
+        -- When using a function, the `items` argument are the default keymaps.
+        ---@type snacks.dashboard.Item[]
+        keys = {
+          {
+            icon = ' ',
+            key = 'f',
+            desc = 'Find File',
+            action = ":lua Snacks.dashboard.pick('files')",
+          },
+          {
+            icon = ' ',
+            key = 'n',
+            desc = 'New File',
+            action = ':ene | startinsert',
+          },
+          {
+            icon = ' ',
+            key = 'g',
+            desc = 'Grep',
+            action = ":lua Snacks.dashboard.pick('live_grep')",
+          },
+          {
+            icon = ' ',
+            key = 'r',
+            desc = 'Recent Files',
+            action = ":lua Snacks.dashboard.pick('oldfiles')",
+          },
+          {
+            icon = ' ',
+            key = 'c',
+            desc = 'Config',
+            action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+          },
+          {
+            icon = ' ',
+            key = 's',
+            desc = 'Session Restore',
+            section = 'session',
+          },
+          {
+            icon = '󰒲 ',
+            key = 'l',
+            desc = 'Lazy',
+            action = ':Lazy',
+            enabled = package.loaded.lazy ~= nil,
+          },
+          {
+            icon = '',
+            key = 'm',
+            desc = 'Mason',
+            action = ':Mason',
+          },
+          {
+            icon = ' ',
+            key = 'q',
+            desc = 'Quit',
+            action = ':qa',
+          },
+        },
       },
       sections = {
-        { section = 'header' },
-        { icon = ' ', title = 'Keymaps', section = 'keys', indent = 2, padding = 1 },
-        { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1 },
-        { icon = ' ', title = 'Projects', section = 'projects', indent = 2, padding = 1 },
+        { text = string.format('NVIM %s', vim.version()), align = 'center', padding = 2 },
+        -- Greets the user depending on the time of day.
+        function()
+          -- Source: https://github.com/nvim-mini/mini.nvim/blob/main/lua/mini/starter.lua
+          -- [02:00, 10:00)(8h) - morning, [10:00, 18:00)(8h) - day, [18:00, 02:00)(8h) - evening
+          local hour = tonumber(vim.fn.strftime '%H')
+          local part_id = math.floor((hour + 6) / 8) + 1
+          local day_part = ({ 'evening', 'morning', 'afternoon', 'evening' })[part_id]
+          local username = vim.loop.os_getenv 'USER_ALIAS_NAME' or vim.loop.os_get_passwd()['username'] or 'user'
+          return {
+            align = 'center',
+            text = { ('Good %s, %s'):format(day_part, username), hl = 'NonText' },
+          }
+        end,
+        { icon = ' ', section = 'keys', indent = 2, padding = 1 },
+        { icon = ' ', title = 'Recent Projects', section = 'projects', indent = 2, padding = 1 },
         { section = 'startup' },
       },
     },
@@ -43,72 +105,7 @@ return {
     },
     picker = {
       enabled = true,
-      sources = {
-        explorer = {
-          -- your explorer picker configuration comes here
-          -- or leave it empty to use the default settings
-          finder = 'explorer',
-          sort = { fields = { 'sort' } },
-          supports_live = true,
-          tree = true,
-          watch = true,
-          diagnostics = true,
-          diagnostics_open = false,
-          git_status = true,
-          git_status_open = false,
-          git_untracked = true,
-          follow_file = true,
-          focus = 'list',
-          auto_close = false,
-          jump = { close = false },
-          layout = { preset = 'sidebar', preview = false },
-          -- to show the explorer to the right, add the below to
-          -- your config under `opts.picker.sources.explorer`
-          layout = { layout = { position = 'right' } },
-          formatters = {
-            file = { filename_only = true },
-            severity = { pos = 'right' },
-          },
-          matcher = { sort_empty = false, fuzzy = false },
-          config = function(opts)
-            return require('snacks.picker.source.explorer').setup(opts)
-          end,
-          win = {
-            list = {
-              keys = {
-                ['<BS>'] = 'explorer_up',
-                ['l'] = 'confirm',
-                ['h'] = 'explorer_close', -- close directory
-                ['a'] = 'explorer_add',
-                ['d'] = 'explorer_del',
-                ['r'] = 'explorer_rename',
-                ['c'] = 'explorer_copy',
-                ['m'] = 'explorer_move',
-                ['o'] = 'explorer_open', -- open with system application
-                ['P'] = 'toggle_preview',
-                ['y'] = { 'explorer_yank', mode = { 'n', 'x' } },
-                ['p'] = 'explorer_paste',
-                ['u'] = 'explorer_update',
-                ['<c-c>'] = 'tcd',
-                ['<leader>/'] = 'picker_grep',
-                ['<c-t>'] = 'terminal',
-                ['.'] = 'explorer_focus',
-                ['I'] = 'toggle_ignored',
-                ['H'] = 'toggle_hidden',
-                ['Z'] = 'explorer_close_all',
-                [']g'] = 'explorer_git_next',
-                ['[g'] = 'explorer_git_prev',
-                [']d'] = 'explorer_diagnostic_next',
-                ['[d'] = 'explorer_diagnostic_prev',
-                [']w'] = 'explorer_warn_next',
-                ['[w'] = 'explorer_warn_prev',
-                [']e'] = 'explorer_error_next',
-                ['[e'] = 'explorer_error_prev',
-              },
-            },
-          },
-        },
-      },
+      layout = { layout = { position = 'right' } },
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
@@ -117,7 +114,7 @@ return {
     words = { enabled = true },
     styles = {
       notification = {
-        -- wo = { wrap = true } -- Wrap notifications
+        -- wo = { wrap = true }, -- Wrap notifications
       },
     },
   },
