@@ -120,30 +120,41 @@ return {
     -- Either 'wiki' or 'markdown'.
     preferred_link_style = 'wiki',
 
-    -- Optional, boolean or a function that takes a filename and returns a boolean.
-    -- `true` indicates that you don't want obsidian.nvim to manage frontmatter.
-    disable_frontmatter = false,
-
-    -- Optional, alternatively you can customize the frontmatter data.
-    ---@return table
-    note_frontmatter_func = function(note)
-      -- Add the title of the note as an alias.
-      if note.title then
-        note:add_alias(note.title)
-      end
-
-      local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-
-      -- `note.metadata` contains any manually added fields in the frontmatter.
-      -- So here we just make sure those fields are kept in the frontmatter.
-      if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-        for k, v in pairs(note.metadata) do
-          out[k] = v
+    ---@class obsidian.config.FrontmatterOpts
+    ---
+    --- Whether to enable frontmatter, boolean for global on/off, or a function that takes filename and returns boolean.
+    ---@field enabled? (fun(fname: string?): boolean)|boolean
+    ---
+    --- Function to turn Note attributes into frontmatter.
+    ---@field func? fun(note: obsidian.Note): table<string, any>
+    --- Function that is passed to table.sort to sort the properties, or a fixed order of properties.
+    ---
+    --- List of string that sorts frontmatter properties, or a function that compares two values, set to vim.NIL/false to do no sorting
+    ---@field sort? string[] | (fun(a: any, b: any): boolean) | vim.NIL | boolean
+    frontmatter = {
+      -- `true` indicates that you want obsidian.nvim to manage frontmatter.
+      enabled = true,
+      -- Optional, alternatively you can customize the frontmatter data.
+      func = function(note)
+        -- Add the title of the note as an alias.
+        if note.title then
+          note:add_alias(note.title)
         end
-      end
 
-      return out
-    end,
+        local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+
+        -- `note.metadata` contains any manually added fields in the frontmatter.
+        -- So here we just make sure those fields are kept in the frontmatter.
+        if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+          for k, v in pairs(note.metadata) do
+            out[k] = v
+          end
+        end
+
+        return out
+      end,
+      sort = { 'id', 'aliases', 'tags' },
+    },
 
     -- Optional, for templates (see https://github.com/obsidian-nvim/obsidian.nvim/wiki/Using-templates)
     templates = {
@@ -188,7 +199,7 @@ return {
 
     picker = {
       -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', 'mini.pick' or 'snacks.pick'.
-      name = 'telescope.nvim',
+      name = 'snacks.pick',
       -- Optional, configure key mappings for the picker. These are the defaults.
       -- Not all pickers support all mappings.
       note_mappings = {
@@ -212,14 +223,20 @@ return {
       parse_headers = true,
     },
 
-    -- Optional, sort search results by "path", "modified", "accessed", or "created".
-    -- The recommend value is "modified" and `true` for `sort_reversed`, which means, for example,
-    -- that `:Obsidian quick_switch` will show the notes sorted by latest modified time
-    sort_by = 'modified',
-    sort_reversed = true,
-
-    -- Set the maximum number of lines to read from notes on disk when performing certain searches.
-    search_max_lines = 1000,
+    ---@class obsidian.config.SearchOpts
+    ---
+    ---@field sort_by string
+    ---@field sort_reversed boolean
+    ---@field max_lines integer
+    search = {
+      -- Optional, sort search results by "path", "modified", "accessed", or "created".
+      -- The recommend value is "modified" and `true` for `sort_reversed`, which means, for example,
+      -- that `:Obsidian quick_switch` will show the notes sorted by latest modified time
+      sort_by = 'modified',
+      sort_reversed = true,
+      -- Set the maximum number of lines to read from notes on disk when performing certain searches.
+      max_lines = 1000,
+    },
 
     -- Optional, determines how certain commands open notes. The valid options are:
     -- 1. "current" (the default) - to always open in the current window
