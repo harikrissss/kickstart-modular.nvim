@@ -311,11 +311,19 @@ return {
       hl_group = 'Comment',
       separator = string.rep('-', 80),
     },
+
     ---@class obsidian.config.CheckboxOpts
+    ---
+    ---@field enabled? boolean
     ---
     ---Order of checkbox state chars, e.g. { " ", "x" }
     ---@field order? string[]
+    ---
+    ---Whether to create new checkbox on paragraphs
+    ---@field create_new? boolean
     checkbox = {
+      enabled = true,
+      create_new = true,
       order = { ' ', '~', '!', '>', 'x' },
     },
 

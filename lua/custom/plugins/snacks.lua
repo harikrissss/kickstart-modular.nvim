@@ -78,22 +78,8 @@ return {
       },
       sections = {
         { text = string.format('NVIM %s', vim.version()), align = 'center', padding = 2 },
-        -- Greets the user depending on the time of day.
-        function()
-          -- Source: https://github.com/nvim-mini/mini.nvim/blob/main/lua/mini/starter.lua
-          -- [02:00, 10:00)(8h) - morning, [10:00, 18:00)(8h) - day, [18:00, 02:00)(8h) - evening
-          local hour = tonumber(vim.fn.strftime '%H')
-          local part_id = math.floor((hour + 6) / 8) + 1
-          local day_part = ({ 'evening', 'morning', 'afternoon', 'evening' })[part_id]
-          local username = vim.loop.os_getenv 'USER_ALIAS_NAME' or vim.loop.os_get_passwd()['username'] or 'user'
-          return {
-            align = 'center',
-            text = { ('Good %s, %s'):format(day_part, username), hl = 'NonText' },
-          }
-        end,
         { icon = ' ', section = 'keys', indent = 2, padding = 1 },
         { icon = ' ', title = 'Recent Projects', section = 'projects', indent = 2, padding = 1 },
-        { section = 'startup' },
       },
     },
     -- explorer = { enabled = true },
