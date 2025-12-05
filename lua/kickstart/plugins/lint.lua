@@ -8,7 +8,7 @@ return {
   config = function()
     local lint = require 'lint'
     lint.linters_by_ft = {
-      markdown = { 'markdownlint' }, -- Make sure to install `markdownlint` via mason / npm
+      markdown = { 'markdownlint-cli2' }, -- Make sure to install `markdownlint` via mason / npm
     }
 
     -- To allow other plugins to add linters to require('lint').linters_by_ft,
@@ -42,7 +42,7 @@ return {
     -- lint.linters_by_ft['ruby'] = nil
     -- lint.linters_by_ft['terraform'] = nil
     -- lint.linters_by_ft['text'] = nil
-
+    
     -- Create autocommand which carries out the actual linting
     -- on the specified events.
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
