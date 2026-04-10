@@ -1,5 +1,3 @@
--- Flexible and sleek fuzzy picker, LSP symbol navigator, and more. inspired by Zed.
-
 return {
   'bassamsdata/namu.nvim',
   config = function()
@@ -13,12 +11,12 @@ return {
       ui_select = { enable = false }, -- vim.ui.select() wrapper
     }
     -- === Suggested Keymaps: ===
-    vim.keymap.set('n', '<leader>ss', ':Namu symbols<cr>', {
-      desc = 'Jump to LSP symbol',
+    vim.keymap.set('n', '<leader>ls', ':Namu symbols<cr>', {
+      desc = 'Jump to (L)SP (s)ymbol',
       silent = true,
     })
-    vim.keymap.set('n', '<leader>sw', ':Namu workspace<cr>', {
-      desc = 'LSP Symbols - Workspace',
+    vim.keymap.set('n', '<leader>lw', ':Namu workspace<cr>', {
+      desc = '(L)SP Symbols - (W)orkspace',
       silent = true,
     })
   end,
