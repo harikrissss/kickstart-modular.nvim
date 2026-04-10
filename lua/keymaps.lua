@@ -21,6 +21,13 @@ vim.diagnostic.config {
   jump = { float = true },
 }
 
+-- keep the yankring clean
+-- prevents `x` and `c` from overwriting yank with `y`
+-- use `"0p` to paste the last explicit yank
+vim.keymap.set({ 'n', 'v' }, 'x', '"_x', { desc = 'Delete char without yanking' })
+vim.keymap.set({ 'n', 'v' }, 'c', '"_c', { desc = 'Change without yanking' })
+
+-- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
