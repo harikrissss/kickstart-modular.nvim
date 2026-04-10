@@ -1,5 +1,3 @@
--- Beautiful floating terminal manager for Neovim
-
 return {
   'nvzone/floaterm',
   dependencies = 'nvzone/volt',
