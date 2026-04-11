@@ -91,6 +91,5 @@ return {
       -- Text object
       map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
     end,
-  },
-}
+  }
 -- vim: ts=2 sts=2 sw=2 et
