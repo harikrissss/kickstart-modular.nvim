@@ -26,9 +26,7 @@ return {
       local MiniFiles = require 'mini.files'
       MiniFiles.setup()
 
-      vim.keymap.set('n', '-', function()
-        MiniFiles.open(vim.api.nvim_buf_get_name(0))
-      end, { desc = 'Open Mini Files' })
+      vim.keymap.set('n', '-', function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end, { desc = 'Open Mini Files' })
 
       -- https://github.com/nvim-mini/mini.nvim/discussions/2173
       -- Window width based on the offset from the center, i.e. center window
@@ -38,21 +36,15 @@ return {
 
       local ensure_center_layout = function(ev)
         local state = MiniFiles.get_explorer_state()
-        if state == nil then
-          return
-        end
+        if state == nil then return end
 
         -- Compute "depth offset" - how many windows are between this and focused
         local path_this = vim.api.nvim_buf_get_name(ev.data.buf_id):match '^minifiles://%d+/(.*)$'
         local depth_this
         for i, path in ipairs(state.branch) do
-          if path == path_this then
-            depth_this = i
-          end
+          if path == path_this then depth_this = i end
         end
-        if depth_this == nil then
-          return
-        end
+        if depth_this == nil then return end
         local depth_offset = depth_this - state.depth_focus
 
         -- Adjust config of this event's window
@@ -143,10 +135,7 @@ return {
         local clean_cwd = cwd:gsub('^minifiles://%d+/', '')
         ---@param content table
         local function on_exit(content)
-          if content.code == 0 then
-            callback(content.stdout)
-            -- vim.g.content = content.stdout
-          end
+          if content.code == 0 then callback(content.stdout) end -- vim.g.content = content.stdout
         end
         ---@see vim.system
         vim.system({ 'git', 'status', '--ignored', '--porcelain' }, { text = true, cwd = clean_cwd }, on_exit)
@@ -164,9 +153,7 @@ return {
 
           for i = 1, nlines do
             local entry = MiniFiles.get_fs_entry(buf_id, i)
-            if not entry then
-              break
-            end
+            if not entry then break end
             local relativePath = entry.path:gsub('^' .. escapedcwd .. '/', '')
             local status = gitStatusMap[relativePath]
 
@@ -221,9 +208,7 @@ return {
               gitStatusMap[currentKey] = status
             else
               -- If it's not the last part, it's a directory. Check if it exists, if not, add it.
-              if not gitStatusMap[currentKey] then
-                gitStatusMap[currentKey] = status
-              end
+              if not gitStatusMap[currentKey] then gitStatusMap[currentKey] = status end
             end
           end
         end
@@ -233,9 +218,7 @@ return {
       ---@param buf_id integer
       ---@return nil
       local function updateGitStatus(buf_id)
-        if not vim.fs.root(buf_id, '.git') then
-          return
-        end
+        if not vim.fs.root(buf_id, '.git') then return end
         local cwd = vim.fs.root(buf_id, '.git')
         -- local cwd = vim.fn.expand("%:p:h")
         local currentTime = os.time()
@@ -255,13 +238,9 @@ return {
       end
 
       ---@return nil
-      local function clearCache()
-        gitStatusCache = {}
-      end
+      local function clearCache() gitStatusCache = {} end
 
-      local function augroup(name)
-        return vim.api.nvim_create_augroup('MiniFiles_' .. name, { clear = true })
-      end
+      local function augroup(name) return vim.api.nvim_create_augroup('MiniFiles_' .. name, { clear = true }) end
 
       autocmd('User', {
         group = augroup 'start',
@@ -275,9 +254,7 @@ return {
       autocmd('User', {
         group = augroup 'close',
         pattern = 'MiniFilesExplorerClose',
-        callback = function()
-          clearCache()
-        end,
+        callback = function() clearCache() end,
       })
 
       autocmd('User', {
@@ -286,26 +263,24 @@ return {
         callback = function(args)
           local bufnr = args.data.buf_id
           local cwd = vim.fs.root(bufnr, '.git')
-          if gitStatusCache[cwd] then
-            updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap)
-          end
+          if gitStatusCache[cwd] then updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap) end
         end,
       })
 
       require('mini.icons').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function() return '%2l:%-2v' end
+      -- -- Simple and easy statusline.
+      -- --  You could remove this setup call if you don't like it,
+      -- --  and try some other statusline plugin
+      -- local statusline = require 'mini.statusline'
+      -- -- set use_icons to true if you have a Nerd Font
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
+      --
+      -- -- You can configure sections in the statusline by overriding their
+      -- -- default behavior. For example, here we set the section for
+      -- -- cursor location to LINE:COLUMN
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      -- statusline.section_location = function() return '%2l:%-2v' end
 
       require('mini.tabline').setup()
 
