@@ -45,7 +45,7 @@ return {
       -- Optional, if you keep daily notes in a separate directory.
       folder = 'src/notes/dailies',
       -- Optional, if you want to change the date format of the default alias of daily notes.
-      alias_format = '%B %-d, %Y',
+      alias_format = 'MMMM D, YYYY',
       -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
       template = 'daily_template.md',
     },
@@ -66,7 +66,7 @@ return {
       local suffix = ''
       if title ~= nil then
         -- If title is given, transform it into valid file name.
-        suffix = title:gsub(' ', '_'):gsub('[^A-Za-z0-9-]', ''):lower()
+        suffix = title:gsub(' ', '_'):gsub('[^A-Za-z0-9_-]', ''):lower()
       else
         -- If title is nil, just add 4 random uppercase letters to the suffix.
         for _ = 1, 4 do
@@ -93,8 +93,8 @@ return {
     ---@field time_format string|?
     templates = {
       folder = 'src/templates',
-      date_format = '%Y-%m-%d',
-      time_format = '%H:%M',
+      date_format = 'YYYY-MM-DD',
+      time_format = 'HH:mm',
     },
 
     ---@class obsidian.config.PickerOpts
