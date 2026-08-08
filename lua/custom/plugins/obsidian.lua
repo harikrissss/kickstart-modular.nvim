@@ -25,7 +25,7 @@ return {
     workspaces = {
       {
         name = 'personal',
-        path = '/home/hari-24312/Documents/obsidian-vault',
+        path = '/Users/hari-24312/Documents/obsidian-vault',
       },
     },
 
@@ -43,7 +43,7 @@ return {
     ---@field template? string
     daily_notes = {
       -- Optional, if you keep daily notes in a separate directory.
-      folder = 'src/notes/dailies',
+      folder = 'src/notes/daily-notes',
       -- Optional, if you want to change the date format of the default alias of daily notes.
       alias_format = 'MMMM D, YYYY',
       -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
