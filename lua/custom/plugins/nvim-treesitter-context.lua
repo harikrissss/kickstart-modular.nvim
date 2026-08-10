@@ -1,3 +1,3 @@
-return {
-  'nvim-treesitter/nvim-treesitter-context',
-}
+vim.pack.add({
+    "https://github.com/nvim-treesitter/nvim-treesitter-context",
+})
