@@ -70,5 +70,16 @@ require("obsidian").setup {
 
   attachments = {
     folder = 'src/assets/imgs',
+    img_text_func = function(path)
+      local name = vim.fs.basename(tostring(path))
+      local encoded_name = require("obsidian.util").urlencode(name)
+      return string.format("![%s](%s)", name, encoded_name)
+      -- local img = tostring(path)
+      -- local note_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
+      -- local rel = vim.fs.relpath(note_dir, img) or img
+      -- local encoded = require('obsidian.util').urlencode(rel, { keep_path_sep = true })
+      -- local name = vim.fs.basename(img)
+      -- return string.format('![%s](%s)', name, encoded)
+    end,
   },
 }
