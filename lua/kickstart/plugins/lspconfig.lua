@@ -174,7 +174,7 @@ require('mason-lspconfig').setup {
 --    :Mason
 --
 -- You can press `g?` for help in this menu.
-local ensure_installed = vim.tbl_keys(servers or {})
+local ensure_installed = vim.tbl_keys(servers)
 vim.list_extend(ensure_installed, {
   -- You can add other tools here that you want Mason to install
 })

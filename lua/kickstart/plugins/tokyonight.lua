@@ -26,7 +26,6 @@ require('tokyonight').setup {
   },
   day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
   dim_inactive = false, -- dims inactive windows
-  lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
 
   --- You can override specific color groups to use other groups or a hex color
   --- function will be called with a ColorScheme table
@@ -63,9 +62,6 @@ require('tokyonight').setup {
     -- Keep visual for popup/picker highlights
     highlights.PmenuSel = { bg = highlights.Visual.bg }
     highlights.TelescopeSelection = { bg = highlights.Visual.bg }
-    highlights.SnacksPickerCursorLine = { bg = highlights.Visual.bg }
-    highlights.SnacksPickerListCursorLine = highlights.SnacksPickerCursorLine
-    highlights.SnacksPickerPreviewCursorLine = highlights.SnacksPickerCursorLine
 
     if vim.o.background == 'dark' then
       -- Use bg.dark from storm (not night) for the cursor line background to make it more subtle
@@ -77,11 +73,6 @@ require('tokyonight').setup {
       -- Make TS context dimmer and color line numbers
       highlights.TreesitterContext = { bg = '#272d45' }
       highlights.TreesitterContextLineNumber = { fg = colors.fg_gutter, bg = '#272d45' }
-      -- modes: I want a more muted green for the insert line
-      -- #1a2326 slightly less green
-      -- #1f2a2e a little brighter
-      -- #1d272a one notch less bright
-      highlights.ModesInsertCursorLine = { bg = '#1f2a2e' }
 
       -- More subtle snacks indent colors
       highlights.SnacksIndent = { fg = '#1f202e' }
@@ -101,11 +92,6 @@ require('tokyonight').setup {
 
       -- Make yaml properties and strings more distinct
       highlights['@property.yaml'] = { fg = '#006a83' }
-
-      -- Make flash label legible in light mode
-      if highlights.FlashLabel then
-        highlights.FlashLabel.fg = colors.bg
-      end
     end
 
     -- telescope
@@ -116,10 +102,6 @@ require('tokyonight').setup {
     highlights.PmenuMatch.bg = 'NONE'
     highlights.BlinkCmpLabelMatch = { fg = highlights.IncSearch.bg }
     highlights.BlinkCmpSource = { fg = colors.terminal_black }
-
-    -- Snacks
-    highlights.SnacksPickerBufNr = highlights.NonText
-    highlights.SnacksPickerMatch = { fg = highlights.IncSearch.bg }
 
     -- clean up gitsigns inline diff colors
     highlights.GitSignsChangeInLine = { fg = colors.git.change, reverse = true }
@@ -151,11 +133,6 @@ require('tokyonight').setup {
     highlights.TelescopePreviewTitle = {
       fg = colors.orange,
     }
-
-    -- Highlight undo/redo in green
-    highlights.HighlightUndo = { fg = colors.bg, bg = colors.green }
-
-    highlights.MarkSignHL = highlights.DiagnosticInfo
 
     -- Less bright trailing space indicator
     highlights.MiniTrailspace = { fg = colors.red }
