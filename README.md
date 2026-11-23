@@ -189,17 +189,17 @@ If `make` is unavailable, the plugin is skipped.
 
 Recommended: install `make` (see the chocolatey section below).
 
-If you want a CMake-only setup, customize `init.lua` in two places:
+If you want a CMake-only setup, customize these two modules:
 
-1. Include `telescope-fzf-native.nvim` when `cmake` is available:
+1. In `lua/kickstart/plugins/telescope.lua`, include `telescope-fzf-native.nvim` when `cmake` is available:
 
 ```lua
 if vim.fn.executable 'make' == 1 or vim.fn.executable 'cmake' == 1 then
-  table.insert(plugins, gh 'nvim-telescope/telescope-fzf-native.nvim')
+  table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim')
 end
 ```
 
-2. In the `PackChanged` hook, use CMake when `make` is unavailable:
+2. In the `PackChanged` hook in `lua/pack.lua`, use CMake when `make` is unavailable:
 
 ```lua
 if name == 'telescope-fzf-native.nvim' then
@@ -281,6 +281,19 @@ sudo dnf install -y gcc make git ripgrep fd-find tree-sitter-cli unzip neovim
 ```
 sudo pacman -S --noconfirm --needed gcc make git ripgrep fd tree-sitter-cli unzip neovim
 ```
+</details>
+
+<details><summary>Alpine Install Steps</summary>
+
+> [!CAUTION]
+> Neovim works fine on Alpine, but some tooling appears incompatible with musl
+> (lua-language-server, etc., check `:Mason` or `:MasonLog`).
+> Quickfix Lua-LSP-Support: `:%s/lua_ls/emmylua_ls`
+
+```shell
+sudo apk add gcc make git fd ripgrep tree-sitter-cli unzip bash gzip curl musl-dev neovim-doc neovim
+```
+
 </details>
 
 ### Alternative neovim installation methods
