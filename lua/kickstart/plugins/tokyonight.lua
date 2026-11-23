@@ -11,8 +11,8 @@ vim.pack.add { gh 'folke/tokyonight.nvim' }
 require('tokyonight').setup {
   style = 'night', -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
   light_style = 'day', -- The theme is used when the background is set to light
-  transparent = false, -- Enable this to disable setting the background color
-  terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+  transparent = true, -- Enable this to disable setting the background color
+  terminal_colors = false, -- Configure the colors used when opening a `:terminal` in Neovim
   styles = {
     -- Style to be applied to different syntax groups
     -- Value is any valid attr-list value for `:help nvim_set_hl`
@@ -21,11 +21,11 @@ require('tokyonight').setup {
     functions = {},
     variables = {},
     -- Background styles. Can be "dark", "transparent" or "normal"
-    sidebars = 'dark', -- style for sidebars, see below
-    floats = 'dark', -- style for floating windows
+    sidebars = 'transparent', -- style for sidebars, see below
+    floats = 'transparent', -- style for floating windows
   },
   day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
-  dim_inactive = true, -- dims inactive windows
+  dim_inactive = false, -- dims inactive windows
   lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
 
   --- You can override specific color groups to use other groups or a hex color
@@ -34,7 +34,7 @@ require('tokyonight').setup {
   on_colors = function(colors)
     colors.border_highlight = colors.blue
 
-    -- brighten up the git colors, used for gitsigns (column and lualine)
+    -- brighten up the git colors, used for gitsigns
     colors.git.add = colors.teal
     colors.git.change = colors.blue
     colors.git.delete = colors.red1
@@ -51,8 +51,6 @@ require('tokyonight').setup {
       colors.bg_dark = '#171821'
       colors.bg_statusline = colors.bg_dark
     end
-
-    -- colors.orange = '#d77f4a' --#f4975f '#ff9e64' #ff966c #d77f4a
   end,
 
   --- You can override specific highlights to use other groups or a hex color
@@ -79,24 +77,15 @@ require('tokyonight').setup {
       -- Make TS context dimmer and color line numbers
       highlights.TreesitterContext = { bg = '#272d45' }
       highlights.TreesitterContextLineNumber = { fg = colors.fg_gutter, bg = '#272d45' }
-
-      -- Make the colors in the Lualine x section dimmer
-      local lualine = require 'lualine.themes.tokyonight-night'
-      lualine.normal.x = { fg = highlights.Comment.fg, bg = colors.bg_statusline }
-
       -- modes: I want a more muted green for the insert line
       -- #1a2326 slightly less green
       -- #1f2a2e a little brighter
       -- #1d272a one notch less bright
       highlights.ModesInsertCursorLine = { bg = '#1f2a2e' }
 
-      -- Don't want teal in neogit diff add
-      -- highlights.NeogitDiffAddHighlight = { fg = '#abd282', bg = highlights.DiffAdd.bg }
-
       -- More subtle snacks indent colors
       highlights.SnacksIndent = { fg = '#1f202e' }
       highlights.SnacksIndentScope = highlights.LineNr
-    -- highlights.SnacksIndentScope = { fg = c.bg_highlight }
     else
       -- Visual selection should match visual mode
       highlights.Visual = { bg = '#d6cae1' }
@@ -110,9 +99,6 @@ require('tokyonight').setup {
       -- Make changed lines more green instead of blue
       highlights.DiffAdd = { bg = '#cce5cf' }
 
-      -- clean up Neogit diff colors (when committing)
-      -- highlights.NeogitDiffAddHighlight = { fg = '#4d6534', bg = highlights.DiffAdd.bg }
-
       -- Make yaml properties and strings more distinct
       highlights['@property.yaml'] = { fg = '#006a83' }
 
@@ -125,42 +111,25 @@ require('tokyonight').setup {
     -- telescope
     highlights.TelescopeMatching = { fg = highlights.IncSearch.bg }
 
-    -- cmp
-    -- highlights.CmpItemAbbrMatchFuzzy = { fg = highlights.IncSearch.bg }
-    -- highlights.CmpItemAbbrMatch = { fg = highlights.IncSearch.bg }
-    -- Darken cmp menu (src for the completion)
-    -- highlights.CmpItemMenu = highlights.CmpGhostText
-
     -- Blink
-    highlights.Pmenu.bg = colors.bg
-    highlights.PmenuMatch.bg = colors.bg
+    highlights.Pmenu.bg = 'NONE'
+    highlights.PmenuMatch.bg = 'NONE'
     highlights.BlinkCmpLabelMatch = { fg = highlights.IncSearch.bg }
     highlights.BlinkCmpSource = { fg = colors.terminal_black }
-
-    -- FzfLua
-    -- highlights.FzfLuaDirPart = highlights.NonText
-    -- highlights.FzfLuaPathLineNr = { fg = colors.fg_dark }
-    -- highlights.FzfLuaFzfCursorLine = highlights.NonText
-    -- highlights.FzfLuaFzfMatch = { fg = highlights.IncSearch.bg }
-    -- highlights.FzfLuaBufNr = { fg = colors.fg }
 
     -- Snacks
     highlights.SnacksPickerBufNr = highlights.NonText
     highlights.SnacksPickerMatch = { fg = highlights.IncSearch.bg }
-
-    -- clean up Neogit diff colors (when committing)
-    -- highlights.NeogitDiffContextHighlight = { bg = highlights.Normal.bg }
-    -- highlights.NeogitDiffContext = { bg = highlights.Normal.bg }
 
     -- clean up gitsigns inline diff colors
     highlights.GitSignsChangeInLine = { fg = colors.git.change, reverse = true }
     highlights.GitSignsAddInLine = { fg = colors.git.add, reverse = true }
     highlights.GitSignsDeleteInLine = { fg = colors.git.delete, reverse = true }
 
-    -- Make folds less prominent (especially important for DiffView)
+    -- Make folds less prominent (especially important in diff views)
     highlights.Folded = { fg = colors.blue0, italic = true }
 
-    -- Make diff* transparent for DiffView file panel
+    -- Make diff* groups foreground-only (no background)
     highlights.diffAdded = { fg = colors.git.add }
     highlights.diffRemoved = { fg = colors.git.delete }
     highlights.diffChanged = { fg = colors.git.change }
@@ -186,7 +155,6 @@ require('tokyonight').setup {
     -- Highlight undo/redo in green
     highlights.HighlightUndo = { fg = colors.bg, bg = colors.green }
 
-    -- highlights.Marks = highlights.DiagnosticInfo
     highlights.MarkSignHL = highlights.DiagnosticInfo
 
     -- Less bright trailing space indicator
@@ -194,6 +162,9 @@ require('tokyonight').setup {
 
     -- Make win separator more prominent
     highlights.WinSeparator = { fg = colors.terminal_black }
+
+    highlights.StatusLine.bg = 'NONE'
+    highlights.StatusLineNC.bg = 'NONE'
   end,
 
   cache = true, -- When set to true, the theme will be cached for better performance
@@ -202,6 +173,6 @@ require('tokyonight').setup {
 -- Load the colorscheme here.
 -- Like many other themes, this one has different styles, and you could load
 -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-vim.cmd.colorscheme 'tokyonight-night'
+vim.cmd.colorscheme 'tokyonight'
 
 -- vim: ts=2 sts=2 sw=2 et
