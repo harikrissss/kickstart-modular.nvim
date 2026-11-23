@@ -109,15 +109,12 @@ vim.api.nvim_create_autocmd('User', { pattern = 'MiniFilesWindowUpdate', callbac
 -- https://gist.github.com/bassamsdata/eec0a3065152226581f8d4244cce9051#file-notes-md
 local nsMiniFiles = vim.api.nvim_create_namespace 'mini_files_git'
 local autocmd = vim.api.nvim_create_autocmd
-local _, MiniFiles = pcall(require, 'mini.files')
 
--- Cache for git status
+-- Git status per repo root, fetched on explorer open, cleared on close
 local gitStatusCache = {}
-local cacheTimeout = 2000 -- in milliseconds
-local uv = vim.uv or vim.loop
 
 local function isSymlink(path)
-  local stat = uv.fs_lstat(path)
+  local stat = vim.uv.fs_lstat(path)
   return stat and stat.type == 'link'
 end
 
@@ -205,7 +202,6 @@ local function updateMiniWithGit(buf_id, gitStatusMap)
             hl_group = hlGroup,
           })
         end
-      else
       end
     end
   end)
@@ -216,30 +212,13 @@ end
 ---@return table
 local function parseGitStatus(content)
   local gitStatusMap = {}
-  -- lua match is faster than vim.split (in my experience )
   for line in content:gmatch '[^\r\n]+' do
-    local status, filePath = string.match(line, '^(..)%s+(.*)')
-    -- Split the file path into parts
-    local parts = {}
-    for part in filePath:gmatch '[^/]+' do
-      table.insert(parts, part)
-    end
-    -- Start with the root directory
-    local currentKey = ''
-    for i, part in ipairs(parts) do
-      if i > 1 then
-        -- Concatenate parts with a separator to create a unique key
-        currentKey = currentKey .. '/' .. part
-      else
-        currentKey = part
-      end
-      -- If it's the last part, it's a file, so add it with its status
-      if i == #parts then
-        gitStatusMap[currentKey] = status
-      else
-        -- If it's not the last part, it's a directory. Check if it exists, if not, add it.
-        if not gitStatusMap[currentKey] then gitStatusMap[currentKey] = status end
-      end
+    local status, filePath = line:match '^(..)%s+(.*)'
+    gitStatusMap[filePath] = status
+    -- Parent dirs take the status of the first file listed under them
+    for i in filePath:gmatch '()/' do
+      local dir = filePath:sub(1, i - 1)
+      gitStatusMap[dir] = gitStatusMap[dir] or status
     end
   end
   return gitStatusMap
@@ -248,27 +227,14 @@ end
 ---@param buf_id integer
 ---@return nil
 local function updateGitStatus(buf_id)
-  if not vim.fs.root(buf_id, '.git') then return end
   local cwd = vim.fs.root(buf_id, '.git')
-  -- local cwd = vim.fn.expand("%:p:h")
-  local currentTime = os.time()
-
-  if gitStatusCache[cwd] and currentTime - gitStatusCache[cwd].time < cacheTimeout then
-    updateMiniWithGit(buf_id, gitStatusCache[cwd].statusMap)
-  else
-    fetchGitStatus(cwd, function(content)
-      local gitStatusMap = parseGitStatus(content)
-      gitStatusCache[cwd] = {
-        time = currentTime,
-        statusMap = gitStatusMap,
-      }
-      updateMiniWithGit(buf_id, gitStatusMap)
-    end)
-  end
+  if not cwd then return end
+  if gitStatusCache[cwd] then return updateMiniWithGit(buf_id, gitStatusCache[cwd]) end
+  fetchGitStatus(cwd, function(content)
+    gitStatusCache[cwd] = parseGitStatus(content)
+    updateMiniWithGit(buf_id, gitStatusCache[cwd])
+  end)
 end
-
----@return nil
-local function clearCache() gitStatusCache = {} end
 
 local function augroup(name) return vim.api.nvim_create_augroup('MiniFiles_' .. name, { clear = true }) end
 
@@ -284,7 +250,7 @@ autocmd('User', {
 autocmd('User', {
   group = augroup 'close',
   pattern = 'MiniFilesExplorerClose',
-  callback = function() clearCache() end,
+  callback = function() gitStatusCache = {} end,
 })
 
 autocmd('User', {
@@ -293,7 +259,7 @@ autocmd('User', {
   callback = function(args)
     local bufnr = args.data.buf_id
     local cwd = vim.fs.root(bufnr, '.git')
-    if gitStatusCache[cwd] then updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap) end
+    if gitStatusCache[cwd] then updateMiniWithGit(bufnr, gitStatusCache[cwd]) end
   end,
 })
 
